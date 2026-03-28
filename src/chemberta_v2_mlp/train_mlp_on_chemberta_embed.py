@@ -1,3 +1,6 @@
+from pathlib import Path
+ROOT = Path(__file__).resolve().parents[2]
+
 import os
 import copy
 import random
@@ -9,13 +12,13 @@ from torch.utils.data import Dataset, DataLoader
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, f1_score, roc_auc_score
 
-TRAIN_CSV = "../Data/chemberta_train.csv"
-TEST_CSV = "../Data/chemberta_test.csv"
-TRAIN_EMB = "../Data/chemberta_train_embed.npy"
-TEST_EMB = "../Data/chemberta_test_embed.npy"
+TRAIN_CSV = str(ROOT / "data" / "processed" / "chemberta_train.csv")
+TEST_CSV = str(ROOT / "data" / "processed" / "chemberta_test.csv")
+TRAIN_EMB = str(ROOT / "data" / "embeddings" / "chemberta_train_embed.npy")
+TEST_EMB = str(ROOT / "data" / "embeddings" / "chemberta_test_embed.npy")
 
-SAVE_MODEL = "../Model/best_mlp_on_chemberta_embed.pt"
-SAVE_TEST_PRED = "../Data/mlp_chemberta_test_pred.csv"
+SAVE_MODEL = str(ROOT / "models" / "chemberta_v2_mlp" / "best_mlp_on_chemberta_embed.pt")
+SAVE_TEST_PRED = str(ROOT / "data" / "processed" / "mlp_chemberta_test_pred.csv")
 
 BATCH_SIZE = 32
 EPOCHS = 30

@@ -1,3 +1,6 @@
+from pathlib import Path
+ROOT = Path(__file__).resolve().parents[2]
+
 import os
 import pickle
 import numpy as np
@@ -14,11 +17,11 @@ from sklearn.metrics import (
     confusion_matrix
 )
 
-FEATURE_PATH = "../Feature/Feature.csv"
-MLP_TRAIN_PATH = "../Data/mlp_chemberta_train_pred.csv"
-MLP_TEST_PATH = "../Data/mlp_chemberta_test_pred_oof.csv"
-MODEL_DIR = "../Model"
-SAVE_MODEL_PATH = "../Model/best_model_stacking_mlp_chemberta.pkl"
+FEATURE_PATH = str(ROOT / "data" / "processed" / "Feature.csv")
+MLP_TRAIN_PATH = str(ROOT / "data" / "processed" / "mlp_chemberta_train_pred.csv")
+MLP_TEST_PATH = str(ROOT / "data" / "processed" / "mlp_chemberta_test_pred_oof.csv")
+MODEL_DIR = ROOT / "models" / "baseline"
+SAVE_MODEL_PATH = ROOT / "models" / "chemberta_v2_mlp" / "best_model_stacking_mlp_chemberta.pkl"
 
 feature_df = pd.read_csv(FEATURE_PATH)
 mlp_train_df = pd.read_csv(MLP_TRAIN_PATH)
@@ -59,7 +62,7 @@ base_model_names = ["RF", "ET", "HistGB", "XGBoost"]
 base_models = {}
 
 for name in base_model_names:
-    model_path = os.path.join(MODEL_DIR, f"best_model_{name}.pkl")
+    model_path = str(MODEL_DIR / f"best_model_{name}.pkl")
     with open(model_path, "rb") as f:
         base_models[name] = pickle.load(f)
     print(f"Loaded: {model_path}")

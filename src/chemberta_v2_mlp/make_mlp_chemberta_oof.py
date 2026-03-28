@@ -1,3 +1,6 @@
+from pathlib import Path
+ROOT = Path(__file__).resolve().parents[2]
+
 import copy
 import random
 import numpy as np
@@ -9,14 +12,14 @@ from torch.utils.data import Dataset, DataLoader
 from sklearn.model_selection import StratifiedKFold
 from sklearn.metrics import accuracy_score, f1_score, roc_auc_score
 
-TRAIN_CSV = "../Data/chemberta_train.csv"
-TEST_CSV = "../Data/chemberta_test.csv"
-TRAIN_EMB = "../Data/chemberta_train_embed.npy"
-TEST_EMB = "../Data/chemberta_test_embed.npy"
+TRAIN_CSV = str(ROOT / "data" / "processed" / "chemberta_train.csv")
+TEST_CSV = str(ROOT / "data" / "processed" / "chemberta_test.csv")
+TRAIN_EMB = str(ROOT / "data" / "embeddings" / "chemberta_train_embed.npy")
+TEST_EMB = str(ROOT / "data" / "embeddings" / "chemberta_test_embed.npy")
 
-OOF_SAVE = "../Data/mlp_chemberta_train_pred.csv"
-TEST_SAVE = "../Data/mlp_chemberta_test_pred_oof.csv"
-MODEL_SAVE = "../Model/best_mlp_chemberta_oof.pt"
+OOF_SAVE = str(ROOT / "data" / "processed" / "mlp_chemberta_train_pred.csv")
+TEST_SAVE = str(ROOT / "data" / "processed" / "mlp_chemberta_test_pred_oof.csv")
+MODEL_SAVE = ROOT / "models" / "chemberta_v2_mlp" / "best_mlp_chemberta_oof.pt"
 
 N_SPLITS = 5
 BATCH_SIZE = 32
@@ -211,6 +214,10 @@ print("Test F1:", round(test_f1, 4))
 print("Test AUC:", round(test_auc, 4))
 
 # save files
+Path(OOF_SAVE).parent.mkdir(parents=True, exist_ok=True)
+Path(TEST_SAVE).parent.mkdir(parents=True, exist_ok=True)
+MODEL_SAVE.parent.mkdir(parents=True, exist_ok=True)
+
 oof_df = train_df.copy()
 oof_df["mlp_prob"] = oof_probs
 oof_df.to_csv(OOF_SAVE, index=False)
@@ -219,7 +226,7 @@ test_out_df = test_df.copy()
 test_out_df["mlp_prob"] = test_probs_mean
 test_out_df.to_csv(TEST_SAVE, index=False)
 
-torch.save(best_global_state, MODEL_SAVE)
+torch.save(best_global_state, str(MODEL_SAVE))
 
 print("\n저장 완료:")
 print(OOF_SAVE)
