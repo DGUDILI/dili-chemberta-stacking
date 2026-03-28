@@ -1,0 +1,46 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# OS / Editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Logs
+*.log
+outputs/logs/*
+
+# Temporary / cache
+.cache/
+.huggingface/
+wandb/
+mlruns/
+
+# Large model artifacts
+models/**/checkpoint*/
+models/**/runs/
+models/**/events*
+models/**/trainer_state.json
+models/**/optimizer.pt
+models/**/scheduler.pt
+models/**/rng_state.pth
+
+# Optional: exclude large generated embeddings if needed
+# data/embeddings/*.npy
+
+# Keep final selected model files if you want
+# If later GitHub 용량 부담되면 아래처럼 .pkl/.pt도 제외 가능
+# models/**/*.pkl
+# models/**/*.pt
