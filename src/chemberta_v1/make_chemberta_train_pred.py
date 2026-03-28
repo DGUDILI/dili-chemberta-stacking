@@ -1,3 +1,6 @@
+from pathlib import Path
+ROOT = Path(__file__).resolve().parents[2]
+
 import os
 import random
 import numpy as np
@@ -15,11 +18,13 @@ from sklearn.model_selection import StratifiedKFold
 from sklearn.metrics import accuracy_score, f1_score, roc_auc_score
 
 MODEL_NAME = "seyonec/ChemBERTa-zinc-base-v1"
-TRAIN_PATH = "../Data/chemberta_train.csv"
-TEST_PATH = "../Data/chemberta_test.csv"
+TRAIN_PATH = str(ROOT / "data" / "processed" / "chemberta_train.csv")
+TEST_PATH = str(ROOT / "data" / "processed" / "chemberta_test.csv")
 
-OOF_SAVE_PATH = "../Data/chemberta_train_pred.csv"
-TEST_SAVE_PATH = "../Data/chemberta_test_pred_oof.csv"
+OOF_SAVE_PATH = str(ROOT / "data" / "processed" / "chemberta_train_pred.csv")
+TEST_SAVE_PATH = str(ROOT / "data" / "processed" / "chemberta_test_pred_oof.csv")
+
+MODEL_BASE_DIR = ROOT / "models" / "chemberta_v1"
 
 N_SPLITS = 5
 MAX_LEN = 128
@@ -103,10 +108,11 @@ for fold, (tr_idx, val_idx) in enumerate(skf.split(train_df, train_df["Label"]),
         num_labels=2
     )
 
-    fold_output_dir = f"../Model/chemberta_fold_{fold}"
+    fold_output_dir = MODEL_BASE_DIR / f"chemberta_fold_{fold}"
+    fold_output_dir.mkdir(parents=True, exist_ok=True)
 
     training_args = TrainingArguments(
-        output_dir=fold_output_dir,
+        output_dir=str(fold_output_dir),
         eval_strategy="epoch",
         save_strategy="epoch",
         logging_strategy="epoch",
@@ -131,7 +137,6 @@ for fold, (tr_idx, val_idx) in enumerate(skf.split(train_df, train_df["Label"]),
 
     trainer.train()
 
-    # validation probability -> OOF
     val_pred = trainer.predict(val_ds)
     val_prob = softmax(val_pred.predictions)[:, 1]
     oof_probs[val_idx] = val_prob
@@ -139,12 +144,10 @@ for fold, (tr_idx, val_idx) in enumerate(skf.split(train_df, train_df["Label"]),
     val_auc = roc_auc_score(fold_val_df["Label"], val_prob)
     print(f"Fold {fold} val AUC: {val_auc:.4f}")
 
-    # test probability
     test_pred = trainer.predict(test_ds)
     test_prob = softmax(test_pred.predictions)[:, 1]
     test_probs_folds.append(test_prob)
 
-# 전체 OOF 성능
 oof_auc = roc_auc_score(train_df["Label"], oof_probs)
 oof_pred_label = (oof_probs >= 0.5).astype(int)
 oof_acc = accuracy_score(train_df["Label"], oof_pred_label)
@@ -155,7 +158,6 @@ print("OOF Accuracy:", round(oof_acc, 4))
 print("OOF F1:", round(oof_f1, 4))
 print("OOF AUC:", round(oof_auc, 4))
 
-# test 평균 확률
 test_probs_mean = np.mean(np.vstack(test_probs_folds), axis=0)
 
 test_auc = roc_auc_score(test_df["Label"], test_probs_mean)
@@ -168,7 +170,9 @@ print("Test Accuracy:", round(test_acc, 4))
 print("Test F1:", round(test_f1, 4))
 print("Test AUC:", round(test_auc, 4))
 
-# 저장
+Path(OOF_SAVE_PATH).parent.mkdir(parents=True, exist_ok=True)
+Path(TEST_SAVE_PATH).parent.mkdir(parents=True, exist_ok=True)
+
 oof_df = train_df.copy()
 oof_df["chemberta_prob"] = oof_probs
 oof_df.to_csv(OOF_SAVE_PATH, index=False)

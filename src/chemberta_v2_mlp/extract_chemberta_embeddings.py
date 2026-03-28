@@ -1,3 +1,6 @@
+from pathlib import Path
+ROOT = Path(__file__).resolve().parents[2]
+
 import os
 import numpy as np
 import pandas as pd
@@ -5,11 +8,11 @@ import torch
 from transformers import AutoTokenizer, AutoModel
 
 MODEL_NAME = "seyonec/ChemBERTa-zinc-base-v1"
-TRAIN_PATH = "../Data/chemberta_train.csv"
-TEST_PATH = "../Data/chemberta_test.csv"
+TRAIN_PATH = str(ROOT / "data" / "processed" / "chemberta_train.csv")
+TEST_PATH = str(ROOT / "data" / "processed" / "chemberta_test.csv")
 
-TRAIN_EMB_PATH = "../Data/chemberta_train_embed.npy"
-TEST_EMB_PATH = "../Data/chemberta_test_embed.npy"
+TRAIN_EMB_PATH = str(ROOT / "data" / "embeddings" / "chemberta_train_embed.npy")
+TEST_EMB_PATH = str(ROOT / "data" / "embeddings" / "chemberta_test_embed.npy")
 
 BATCH_SIZE = 32
 MAX_LEN = 128

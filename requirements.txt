@@ -7,11 +7,10 @@ transformers
 datasets
 accelerate
 sentencepiece
-jupyter
-notebook
 matplotlib
 joblib
 openpyxl
 tqdm
 deap
 ipykernel
+jupyter

@@ -1,3 +1,6 @@
+from pathlib import Path
+ROOT = Path(__file__).resolve().parents[2]
+
 import os
 import numpy as np
 import pandas as pd
@@ -12,9 +15,9 @@ from sklearn.metrics import accuracy_score, f1_score, roc_auc_score
 from sklearn.model_selection import train_test_split
 
 MODEL_NAME = "seyonec/ChemBERTa-zinc-base-v1"
-TRAIN_PATH = "../Data/chemberta_train.csv"
-TEST_PATH = "../Data/chemberta_test.csv"
-SAVE_DIR = "../Model/best_model_chemberta"
+TRAIN_PATH = str(ROOT / "data" / "processed" / "chemberta_train.csv")
+TEST_PATH = str(ROOT / "data" / "processed" / "chemberta_test.csv")
+SAVE_DIR = str(ROOT / "models" / "chemberta_v1" / "best_model_chemberta")
 
 train_df = pd.read_csv(TRAIN_PATH)
 test_df = pd.read_csv(TEST_PATH)
@@ -81,7 +84,7 @@ def compute_metrics(eval_pred):
     }
 
 training_args = TrainingArguments(
-    output_dir="../Model/chemberta_runs",
+    output_dir=str(ROOT / "models" / "chemberta_v1" / "chemberta_runs"),
     eval_strategy="epoch",
     save_strategy="epoch",
     logging_strategy="epoch",
@@ -117,7 +120,7 @@ pred_labels = probs.argmax(axis=1)
 result_df = test_df.copy()
 result_df["chemberta_prob"] = probs[:, 1]
 result_df["chemberta_pred"] = pred_labels
-result_df.to_csv("../Data/chemberta_test_pred.csv", index=False)
+result_df.to_csv(str(ROOT / "data" / "processed" / "chemberta_test_pred.csv"), index=False)
 
 acc = accuracy_score(test_df["Label"], pred_labels)
 f1 = f1_score(test_df["Label"], pred_labels)
@@ -128,5 +131,5 @@ print("Accuracy:", round(acc, 4))
 print("F1:", round(f1, 4))
 print("AUC:", round(auc, 4))
 print("\n저장 완료:")
-print("../Model/best_model_chemberta")
-print("../Data/chemberta_test_pred.csv")
+print(str(ROOT / "models" / "chemberta_v1" / "best_model_chemberta"))
+print(str(ROOT / "data" / "processed" / "chemberta_test_pred.csv"))

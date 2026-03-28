@@ -1,3 +1,6 @@
+from pathlib import Path
+ROOT = Path(__file__).resolve().parents[2]
+
 import os
 import pickle
 import numpy as np
@@ -17,11 +20,11 @@ from sklearn.metrics import (
 # =========================
 # 경로 설정
 # =========================
-FEATURE_PATH = "../Feature/Feature.csv"
-CHEMBERTA_TRAIN_PATH = "../Data/chemberta_train_pred.csv"
-CHEMBERTA_TEST_PATH = "../Data/chemberta_test_pred_oof.csv"
-MODEL_DIR = "../Model"
-SAVE_MODEL_PATH = "../Model/best_model_stacking_chemberta.pkl"
+FEATURE_PATH = str(ROOT / "data" / "processed" / "Feature.csv")
+CHEMBERTA_TRAIN_PATH = str(ROOT / "data" / "processed" / "chemberta_train_pred.csv")
+CHEMBERTA_TEST_PATH = str(ROOT / "data" / "processed" / "chemberta_test_pred_oof.csv")
+MODEL_DIR = ROOT / "models" / "baseline"
+SAVE_MODEL_PATH = ROOT / "models" / "chemberta_v1" / "best_model_stacking_chemberta.pkl"
 
 # =========================
 # 데이터 로드
@@ -81,7 +84,7 @@ base_model_names = ["RF", "ET", "HistGB", "XGBoost"]
 base_models = {}
 
 for name in base_model_names:
-    model_path = os.path.join(MODEL_DIR, f"best_model_{name}.pkl")
+    model_path = str(MODEL_DIR / f"best_model_{name}.pkl")
     with open(model_path, "rb") as f:
         base_models[name] = pickle.load(f)
     print(f"Loaded: {model_path}")

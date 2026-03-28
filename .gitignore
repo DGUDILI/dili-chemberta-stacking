@@ -44,3 +44,20 @@ models/**/rng_state.pth
 # If later GitHub 용량 부담되면 아래처럼 .pkl/.pt도 제외 가능
 # models/**/*.pkl
 # models/**/*.pt
+
+
+
+# generated model artifacts
+models/chemberta_v1/best_model_chemberta/
+models/chemberta_v2_mlp/*.pt
+
+# generated prediction files
+data/processed/chemberta_test_pred.csv
+data/processed/mlp_chemberta_test_pred.csv
+data/processed/chemberta_train_pred.csv
+data/processed/chemberta_test_pred_oof.csv
+data/processed/mlp_chemberta_train_pred.csv
+data/processed/mlp_chemberta_test_pred_oof.csv
+
+# optional: embeddings if you don't want generated arrays tracked
+data/embeddings/*.npy
