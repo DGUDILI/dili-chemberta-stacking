@@ -1,0 +1,16 @@
+numpy
+pandas
+scikit-learn
+xgboost
+torch
+transformers
+datasets
+accelerate
+sentencepiece
+matplotlib
+joblib
+openpyxl
+tqdm
+deap
+ipykernel
+jupyter
