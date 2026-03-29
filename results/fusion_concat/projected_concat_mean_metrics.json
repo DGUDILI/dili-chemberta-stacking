@@ -1,0 +1,13 @@
+{
+  "model": "fp_plus_chemberta_projected_concat",
+  "pooling": "mean",
+  "fp_input_dim": 218,
+  "chem_input_dim": 768,
+  "proj_dim": 16,
+  "test_auc": 0.8290882543802726,
+  "test_f1": 0.7235142118863049,
+  "test_mcc": 0.5193319203475429,
+  "test_acc": 0.7632743362831859,
+  "num_train": 1398,
+  "num_test": 452
+}

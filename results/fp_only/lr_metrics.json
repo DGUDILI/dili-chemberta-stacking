@@ -1,0 +1,10 @@
+{
+  "model": "fp_only_lr",
+  "test_auc": 0.830730856586632,
+  "test_f1": 0.7210526315789474,
+  "test_mcc": 0.5198812969356673,
+  "test_acc": 0.7654867256637168,
+  "num_features": 218,
+  "num_train": 1398,
+  "num_test": 452
+}

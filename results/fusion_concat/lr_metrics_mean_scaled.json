@@ -1,0 +1,14 @@
+{
+  "model": "fp_plus_chemberta_concat_lr",
+  "pooling": "mean",
+  "scaled": true,
+  "test_auc": 0.6484425697598962,
+  "test_f1": 0.5572139303482587,
+  "test_mcc": 0.2095911150611993,
+  "test_acc": 0.6061946902654868,
+  "num_fp_features": 218,
+  "num_chemberta_features": 768,
+  "num_total_features": 986,
+  "num_train": 1398,
+  "num_test": 452
+}

@@ -1,0 +1,15 @@
+{
+  "model": "fp_plus_chemberta_crossattn",
+  "pooling": "mean",
+  "fp_input_dim": 218,
+  "chem_input_dim": 768,
+  "num_tokens_per_branch": 4,
+  "token_dim": 16,
+  "best_val_auc": 0.7180993609565038,
+  "test_auc": 0.7417058728098638,
+  "test_f1": 0.5850746268656717,
+  "test_mcc": 0.3487800615528013,
+  "test_acc": 0.6924778761061947,
+  "num_train": 1398,
+  "num_test": 452
+}
